@@ -52,14 +52,16 @@
       </span>
     </div>
 
+<div class="f-ico-m" style="top:calc(50% - 100%e);left:calc(50% - 50%e)">&#xE005;</div>
+
     <!-- Bottom area: climb category -->
     <div class="sp-t-s p-hc" style="top:calc(78% - 50%e);">Category</div>
     <div class="sp-b-m p-hc" style="top:calc(90% - 50%e);">
       <span id="category-value">--</span>
     </div>
 
-    <!-- DEBUG ONLY: drives main.js's debugGradient while DEBUG_MODE is on.
-         Remove this block together with DEBUG_MODE/onEvent in main.js. -->
+    <!-- Simulator-only debug controls: these only affect the fallback gradient
+         path when real climb telemetry is unavailable. -->
     <userInput>
       <pushButton name="up" onClick="$.put('/Zapp/{zapp_index}/Event', 1, null, 'int32');"
         onLongPressStart="$.put('/Zapp/{zapp_index}/Event', 2, null, 'int32');" />

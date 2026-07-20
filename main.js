@@ -17,18 +17,9 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
 
 // DEBUG ONLY: upper bound for manual gradient testing, comfortably above the HC threshold.
 var DEBUG_MAX = 20;
+var DEBUG_STEP = 2; // % per button press
 
 var smoothedGradient;
-
-// DEBUG ONLY: the bundled simulator never feeds /Fusion/Altitude/VerticalSpeed
-// or a changing altitude, so gradient/category can't be exercised with real
-// telemetry there. While DEBUG_MODE is on, the up/down buttons drive the
-// gradient by hand so Easy/Medium/Hard can be watched switching live.
-// To remove: delete this block, the "if (DEBUG_MODE) {...} else" branch below
-// (keep only the else body), the onEvent function, and the <userInput> block
-// in t.html.
-var DEBUG_MODE = 1;
-var DEBUG_STEP = 2; // % per button press
 var debugGradient;
 
 function onLoad(input, output) {
@@ -42,9 +33,7 @@ function onLoad(input, output) {
 // System starts calling this about once per second after the sports app is selected
 // i.e. before the exercise is actually started.
 function evaluate(input, output) {
-  if (DEBUG_MODE) {
-    smoothedGradient = debugGradient;
-  } else if (typeof input.speed === 'number' && typeof input.vSpeed === 'number' && input.speed > MIN_SPEED) {
+  if (typeof input.speed === 'number' && typeof input.vSpeed === 'number' && input.speed > MIN_SPEED) {
     // Instantaneous climbing gradient (%) = rise/run = vertical speed / ground speed.
     // Guard against unresolved inputs (e.g. a resource the simulator doesn't feed):
     // dividing by/using a non-number here would poison the EMA with NaN forever.
@@ -52,6 +41,10 @@ function evaluate(input, output) {
     if (rawGradient > 60) rawGradient = 60;
     if (rawGradient < -60) rawGradient = -60;
     smoothedGradient = smoothedGradient + GRADIENT_ALPHA * (rawGradient - smoothedGradient);
+  } else {
+    // Simulator-only fallback: let the watch buttons drive the gradient when real
+    // altitude/speed telemetry is not available.
+    smoothedGradient = debugGradient;
   }
   output.gradient = smoothedGradient;
 
@@ -79,9 +72,6 @@ function evaluate(input, output) {
   }
 }
 
-// DEBUG ONLY: up/down buttons (wired in t.html) nudge the gradient by
-// DEBUG_STEP; long-press either button resets it to 0. Remove along with
-// DEBUG_MODE above and the <userInput> block in t.html when done testing.
 function onEvent(input, output, eventId) {
   switch (eventId) {
     case 1: debugGradient += DEBUG_STEP; break; // up, click
