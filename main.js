@@ -18,25 +18,33 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
 // DEBUG ONLY: upper bound for manual gradient testing, comfortably above the HC threshold.
 var DEBUG_MAX = 20;
 var DEBUG_STEP = 2; // % per button press
-var UPDATE_INTERVAL_SECONDS = 5;
+var UPDATE_INTERVAL_SECONDS = 2;
 
 var smoothedGradient;
 var debugGradient;
 var updateCounter;
+var maxgradient;
+var debugEnabled;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
   debugGradient = 0;
   updateCounter = 0;
+  maxgradient = 0;
+  debugEnabled = false;
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
+  output.maxgradient = 0;
 }
 
 // System starts calling this about once per second after the sports app is selected
 // i.e. before the exercise is actually started.
 function evaluate(input, output) {
-  if (typeof input.speed === 'number' && typeof input.vSpeed === 'number' && input.speed > MIN_SPEED) {
+  var hasRealTelemetry = typeof input.speed === 'number' && typeof input.vSpeed === 'number' && input.speed > MIN_SPEED;
+  debugEnabled = !hasRealTelemetry;
+
+  if (hasRealTelemetry) {
     // Instantaneous climbing gradient (%) = rise/run = vertical speed / ground speed.
     // Guard against unresolved inputs (e.g. a resource the simulator doesn't feed):
     // dividing by/using a non-number here would poison the EMA with NaN forever.
@@ -49,10 +57,15 @@ function evaluate(input, output) {
     // altitude/speed telemetry is not available.
     smoothedGradient = debugGradient;
   }
+  if (smoothedGradient > maxgradient) {
+    maxgradient = smoothedGradient;
+  }
+
   updateCounter += 1;
   if (updateCounter >= UPDATE_INTERVAL_SECONDS) {
     updateCounter = 0;
     output.gradient = smoothedGradient;
+    output.maxgradient = maxgradient;
 
     // VAM (Vertical Ascent Meters per hour), averaged over the time actually
     // spent ascending rather than the whole move, so flats/descents don't dilute it.
@@ -80,6 +93,10 @@ function evaluate(input, output) {
 }
 
 function onEvent(input, output, eventId) {
+  if (!debugEnabled) {
+    return;
+  }
+
   switch (eventId) {
     case 1: debugGradient += DEBUG_STEP; break; // up, click
     case 2: debugGradient = 0; break;           // up, long press
@@ -126,6 +143,12 @@ function getSummaryOutputs(input, output) {
       name: 'Avg gradient',
       format: 'Percentage_Fourdigits',
       value: output.gradient
+    },
+    {
+      id: 'maxGradient',
+      name: 'Max gradient',
+      format: 'Percentage_Fourdigits',
+      value: output.maxgradient
     }
   ];
 }

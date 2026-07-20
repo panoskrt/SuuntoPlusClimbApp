@@ -29,46 +29,38 @@
 
   <div id="suuntoplus">
 
-    <!-- Topmost: title field -->
-    <div class="cm-fg" style="width:100%;height:25%;">
+    <!-- Top title -->
+    <div class="cm-fg" style="width:100%;height:24%;">
       <div class="sp-t-s p-hc" style="top:calc(60% - 50%e);">Cycling Climb Category</div>
     </div>
 
-    <!-- Field just under the title, left side -->
-    <!-- Field title -->
-    <div class="cm-mid sp-t-s" style="top:calc(43% - 100%e);left:calc(26% - 50%e);">Gradient</div>
-    <!-- Field value -->
-    <div class="sp-d-s f-num" style="top:calc(61% - 100%e);left:calc(26% - 50%e);">
-      <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
+    <!-- Top-left metric: Gradient -->
+    <div class="cm-mid sp-t-s" style="top:calc(38% - 100%e);left:calc(24% - 50%e);">Gradient</div>
+    <div class="sp-d-s f-num" style="top:calc(52% - 100%e);left:calc(24% - 50%e);">
+      <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>%
     </div>
 
-    <!-- Field just under the title, right side -->
-    <!-- Field title -->
-    <div class="cm-mid sp-t-s" style="top:calc(43% - 100%e);left:calc(74% - 50%e);">VAM</div>
-    <!-- Field value -->
-    <div style="top:calc(61% - 100%e);left:calc(74% - 50%e);">
+    <!-- Top-right metric: VAM -->
+    <div class="cm-mid sp-t-s" style="top:calc(38% - 100%e);left:calc(76% - 50%e);">VAM</div>
+    <div style="top:calc(52% - 100%e);left:calc(76% - 50%e);">
       <span class="sp-d-s f-num">
         <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
       </span>
     </div>
 
-<div class="f-ico-m" style="top:calc(50% - 100%e);left:calc(50% - 50%e)">&#xE005;</div>
-
-    <!-- Bottom area: climb category -->
-    <div class="sp-t-s p-hc" style="top:calc(78% - 50%e);">Category</div>
-    <div class="sp-b-m p-hc" style="top:calc(90% - 50%e);">
-      <span id="category-value" style="font-size: 30px;">--</span>
+    <!-- Bottom-left metric: Max gradient -->
+    <div class="cm-mid sp-t-s" style="top:calc(72% - 100%e);left:calc(24% - 50%e);">Max</div>
+    <div style="top:calc(86% - 100%e);left:calc(24% - 50%e);">
+      <span class="sp-d-s f-num">
+        <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="Percentage_Fourdigits" default="--"/>
+      </span>
     </div>
 
-    <!-- Simulator-only debug controls: these only affect the fallback gradient
-         path when real climb telemetry is unavailable. -->
-    <userInput>
-      <pushButton name="up" onClick="$.put('/Zapp/{zapp_index}/Event', 1, null, 'int32');"
-        onLongPressStart="$.put('/Zapp/{zapp_index}/Event', 2, null, 'int32');" />
-      <pushButton name="down" onClick="$.put('/Zapp/{zapp_index}/Event', 3, null, 'int32');"
-        onLongPressStart="$.put('/Zapp/{zapp_index}/Event', 4, null, 'int32');" />
-    </userInput>
-
+    <!-- Bottom-right metric: Category -->
+    <div class="cm-mid sp-t-s" style="top:calc(72% - 100%e);left:calc(76% - 50%e);">Category</div>
+    <div class="sp-b-m p-hc" style="top:calc(86% - 100%e);left:calc(76% - 50%e);">
+      <span id="category-value">--</span>
+    </div>
   </div>
 
 </uiView>
