@@ -18,13 +18,16 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
 // DEBUG ONLY: upper bound for manual gradient testing, comfortably above the HC threshold.
 var DEBUG_MAX = 20;
 var DEBUG_STEP = 2; // % per button press
+var UPDATE_INTERVAL_SECONDS = 5;
 
 var smoothedGradient;
 var debugGradient;
+var updateCounter;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
   debugGradient = 0;
+  updateCounter = 0;
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
@@ -46,29 +49,33 @@ function evaluate(input, output) {
     // altitude/speed telemetry is not available.
     smoothedGradient = debugGradient;
   }
-  output.gradient = smoothedGradient;
+  updateCounter += 1;
+  if (updateCounter >= UPDATE_INTERVAL_SECONDS) {
+    updateCounter = 0;
+    output.gradient = smoothedGradient;
 
-  // VAM (Vertical Ascent Meters per hour), averaged over the time actually
-  // spent ascending rather than the whole move, so flats/descents don't dilute it.
-  // Kept in m/s here; the template converts to m/h via VerticalSpeedMountain.
-  output.vam = input.ascentTime > 5 ? (input.ascent / input.ascentTime) : 0;
+    // VAM (Vertical Ascent Meters per hour), averaged over the time actually
+    // spent ascending rather than the whole move, so flats/descents don't dilute it.
+    // Kept in m/s here; the template converts to m/h via VerticalSpeedMountain.
+    output.vam = input.ascentTime > 5 ? (input.ascent / input.ascentTime) : 0;
 
-  // Classify the current (smoothed) gradient into a climb category. Category
-  // numbers must match the keyValue map in t.html: 0=Flat (easiest) .. 6=HC+ (hardest).
-  if (smoothedGradient < CLIMB_FLAT) {
-    output.category = 0; // Flat
-  } else if (smoothedGradient < CLIMB_CAT4) {
-    output.category = 1; // Cat4 - very easy
-  } else if (smoothedGradient < CLIMB_CAT3) {
-    output.category = 2; // Cat3 - easy
-  } else if (smoothedGradient < CLIMB_CAT2) {
-    output.category = 3; // Cat2 - moderate
-  } else if (smoothedGradient < CLIMB_CAT1) {
-    output.category = 4; // Cat1 - hard
-  } else if (smoothedGradient < CLIMB_HC) {
-    output.category = 5; // HC - very hard
-  } else {
-    output.category = 6; // HC+ - hardest
+    // Classify the current (smoothed) gradient into a climb category. Category
+    // numbers must match the keyValue map in t.html: 0=Flat (easiest) .. 6=HC+ (hardest).
+    if (smoothedGradient < CLIMB_FLAT) {
+      output.category = 0; // Flat
+    } else if (smoothedGradient < CLIMB_CAT4) {
+      output.category = 1; // Cat4 - very easy
+    } else if (smoothedGradient < CLIMB_CAT3) {
+      output.category = 2; // Cat3 - easy
+    } else if (smoothedGradient < CLIMB_CAT2) {
+      output.category = 3; // Cat2 - moderate
+    } else if (smoothedGradient < CLIMB_CAT1) {
+      output.category = 4; // Cat1 - hard
+    } else if (smoothedGradient < CLIMB_HC) {
+      output.category = 5; // HC - very hard
+    } else {
+      output.category = 6; // HC+ - hardest
+    }
   }
 }
 
