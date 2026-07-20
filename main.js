@@ -121,7 +121,7 @@ function getSummaryOutputs(input, output) {
     {
       id: 'vam',
       name: 'Avg VAM',
-      format: 'VerticalSpeedMountain_Twodigits',
+      format: 'VerticalSpeedMountain_Fourdigits',
       value: output.vam
     },
     {

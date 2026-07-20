@@ -46,8 +46,10 @@
     <!-- Field title -->
     <div class="cm-mid sp-t-s" style="top:calc(43% - 100%e);left:calc(74% - 50%e);">VAM</div>
     <!-- Field value -->
-    <div class="sp-d-s f-num" style="top:calc(61% - 100%e);left:calc(74% - 50%e);">
-      <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Twodigits" default="--"/>
+    <div style="top:calc(61% - 100%e);left:calc(74% - 50%e);">
+      <span class="sp-d-s f-num">
+        <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
+      </span>
     </div>
 
     <!-- Bottom area: climb category -->
