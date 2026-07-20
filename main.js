@@ -15,23 +15,16 @@ var CLIMB_CAT1 = 10; // < 10%: hard - orange
 var CLIMB_HC = 12;   // < 12%: very hard - red
                     // >= 12%: HC+, very very hard - dark red
 
-// DEBUG ONLY: upper bound for manual gradient testing, comfortably above the HC threshold.
-var DEBUG_MAX = 20;
-var DEBUG_STEP = 2; // % per button press
 var UPDATE_INTERVAL_SECONDS = 2;
 
 var smoothedGradient;
-var debugGradient;
 var updateCounter;
 var maxgradient;
-var debugEnabled;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
-  debugGradient = 0;
   updateCounter = 0;
   maxgradient = 0;
-  debugEnabled = false;
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
@@ -42,7 +35,6 @@ function onLoad(input, output) {
 // i.e. before the exercise is actually started.
 function evaluate(input, output) {
   var hasRealTelemetry = typeof input.speed === 'number' && typeof input.vSpeed === 'number' && input.speed > MIN_SPEED;
-  debugEnabled = !hasRealTelemetry;
 
   if (hasRealTelemetry) {
     // Instantaneous climbing gradient (%) = rise/run = vertical speed / ground speed.
@@ -52,10 +44,6 @@ function evaluate(input, output) {
     if (rawGradient > 60) rawGradient = 60;
     if (rawGradient < -60) rawGradient = -60;
     smoothedGradient = smoothedGradient + GRADIENT_ALPHA * (rawGradient - smoothedGradient);
-  } else {
-    // Simulator-only fallback: let the watch buttons drive the gradient when real
-    // altitude/speed telemetry is not available.
-    smoothedGradient = debugGradient;
   }
   if (smoothedGradient > maxgradient) {
     maxgradient = smoothedGradient;
@@ -90,21 +78,6 @@ function evaluate(input, output) {
       output.category = 6; // HC+ - hardest
     }
   }
-}
-
-function onEvent(input, output, eventId) {
-  if (!debugEnabled) {
-    return;
-  }
-
-  switch (eventId) {
-    case 1: debugGradient += DEBUG_STEP; break; // up, click
-    case 2: debugGradient = 0; break;           // up, long press
-    case 3: debugGradient -= DEBUG_STEP; break; // down, click
-    case 4: debugGradient = 0; break;           // down, long press
-  }
-  if (debugGradient > DEBUG_MAX) debugGradient = DEBUG_MAX;
-  if (debugGradient < -DEBUG_MAX) debugGradient = -DEBUG_MAX;
 }
 
 /* Other available callbacks:
