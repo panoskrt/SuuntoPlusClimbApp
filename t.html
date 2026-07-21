@@ -45,7 +45,7 @@
 
     <!-- top left -->
 <:if test="{APP_IS_DISPLAY_LARGE}">
-    <div class="f-ico" style="top:calc(35% - 100%e);left:calc(26% - 50%e)">%</div>
+    <div class="sp-d-m" style="top:calc(35% - 100%e);left:calc(26% - 50%e)">%</div>
     <div class="sp-d-m f-num" style="top:calc(41% - 50%e);left:calc(26% - 50%e)">
       <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
     </div>
@@ -53,7 +53,7 @@
 <:else>
     <div style="top:26%;left:3%;width:46%;height:30%">
       <div class="p-hc sp-vertical-center">
-        <span class="f-ico" style="padding-right:4px">%</span>
+        <span class="sp-d-s" style="padding-right:4px">%</span>
         <span class="sp-d-s f-num">
           <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
         </span>
@@ -116,8 +116,8 @@
 </:else>
 
     <!-- bottom middle -->
-    <div class="sp-d-s f-num p-hc" style="top:calc(86% - 50%e)">
-      <span id="category-value">--</span>
+    <div class="sp-t-m p-hc" style="top:calc(80% - 50%e)">
+      <span id="category-value" class="sp-t-m">--</span>
     </div>
 
   </div>
