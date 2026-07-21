@@ -55,12 +55,8 @@ function evaluate(input, output) {
     updateCounter = 0;
     output.gradient = smoothedGradient;
     output.maxgradient = maxgradient;
-    output.totalAscent = input.ascent;
-
-    // VAM (Vertical Ascent Meters per hour), averaged over the time actually
-    // spent ascending rather than the whole move, so flats/descents don't dilute it.
-    // Kept in m/s here; the template converts to m/h via VerticalSpeedMountain.
-    output.vam = input.ascentTime > 5 ? (input.ascent / input.ascentTime) : 0;
+    output.totalAscent = Math.round(input.ascent);
+    output.vam = Math.round(input.ascent / input.ascentTime);
 
     // Classify the current (smoothed) gradient into a climb category. Category
     // numbers must match the keyValue map in t.html: 0=Flat (easiest) .. 6=HC+ (hardest).
@@ -101,10 +97,6 @@ function getUserInterface() {
   };
 }
 
-// Defines the info shown at the bottom of the exercise summary info shown after the exercise.
-// These values are also provided to SuuntoApp.
-// This is called when exercise ends and also when user backs from exercise start panel
-// without starting the exercise.
 function getSummaryOutputs(input, output) {
   return [
     {
