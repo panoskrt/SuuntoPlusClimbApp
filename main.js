@@ -29,6 +29,7 @@ function onLoad(input, output) {
   output.vam = 0;
   output.category = 0;
   output.maxgradient = 0;
+  output.totalAscent = 0;
 }
 
 // System starts calling this about once per second after the sports app is selected
@@ -54,6 +55,7 @@ function evaluate(input, output) {
     updateCounter = 0;
     output.gradient = smoothedGradient;
     output.maxgradient = maxgradient;
+    output.totalAscent = input.ascent;
 
     // VAM (Vertical Ascent Meters per hour), averaged over the time actually
     // spent ascending rather than the whole move, so flats/descents don't dilute it.

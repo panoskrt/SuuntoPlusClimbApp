@@ -12,7 +12,7 @@
     { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" },
     { "name": "ascentTime", "source": "Fusion/Altitude/AscentTime", "type": "subscribe" }
   ],
-  "out": [{ "name": "gradient", "log": true }, { "name": "vam", "log": true }, { "name": "category" }, { "name": "maxgradient" }],
+  "out": [{ "name": "gradient", "log": true }, { "name": "vam", "log": true }, { "name": "category" }, { "name": "maxgradient" }, { "name": "totalAscent" }],
   "template": [{ "name": "t.html" }],
   "image": []
 }
