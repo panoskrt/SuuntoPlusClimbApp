@@ -1,15 +1,9 @@
 <uiView
-  onLoad="
-    var categorySubscription;
-  "
+  onLoad="var categorySubscription;"
+
   onActivate="
-    // Category text + color per tier, matching main.js's CLIMB_* comments:
-    // gray -> green -> blue -> yellow -> orange -> red -> dark red.
-    // Colors are hardcoded hex rather than looked up via getStyle('css:.c-x')
-    // because not every watch display defines the same named color classes
-    // (e.g. plain .c-blue is missing on the newer 'q' display's stylesheet).
     var categoryInfo = [
-      { text: 'Flat', color: '#6B641C' },
+      { text: 'Flat', color: '' },
       { text: 'Cat4', color: '#005E1F' },
       { text: 'Cat3', color: '#003DB8' },
       { text: 'Cat2', color: '#AD9207' },
@@ -23,15 +17,13 @@
       setStyle('#category-value', 'color', info.color);
     });
   "
-  onDeactivate="
-    $.unsubscribe(categorySubscription);
-  ">
+  onDeactivate="$.unsubscribe(categorySubscription);">
 
   <div id="suuntoplus">
 
     <!-- Title and its background -->
     <div class="cm-fg" style="width:100%;height:24%;">
-      <div class="sp-t-s p-hc" style="top:calc(50% - 40%e);">Cycling Climb Category</div>
+      <div class="sp-t-s p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
     </div>
 
     <!-- vertical separator -->
@@ -44,78 +36,83 @@
     -->
 
     <!-- top left -->
-<:if test="{APP_IS_DISPLAY_LARGE}">
-    <div class="sp-d-m" style="top:calc(35% - 100%e);left:calc(26% - 50%e)">%</div>
-    <div class="sp-d-m f-num" style="top:calc(41% - 50%e);left:calc(26% - 50%e)">
-      <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
-    </div>
-</:if>
-<:else>
-    <div style="top:26%;left:3%;width:46%;height:30%">
-      <div class="p-hc sp-vertical-center">
-        <span class="sp-d-s" style="padding-right:4px">%</span>
-        <span class="sp-d-s f-num">
+    <!-- Gradient -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">
+        <div class="sp-d-m" style="top:calc(35% - 100%e);left:calc(26% - 50%e)">%</div>
+        <div class="sp-d-m f-num" style="top:calc(41% - 50%e);left:calc(26% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
-        </span>
-      </div>
-    </div>
-</:else>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:26%;left:3%;width:46%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s" style="padding-right:4px">%</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>
 
     <!-- top right -->
-<:if test="{APP_IS_DISPLAY_LARGE}">    
-    <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF259;</div>
-    <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)">
-      <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
-    </div>
-</:if>
-<:else>
-    <div style="top:26%;left:51%;width:46%;height:30%">
-      <div class="p-hc sp-vertical-center">
-        <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
+    <!-- VAM -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF259;</div>
+        <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
-        </span>
-        <span class="f-ico" style="padding-left:4px">&#xF259;</span>
-      </div>
-    </div>   
-</:else>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:26%;left:51%;width:46%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
+              <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
+            </span>
+            <span class="f-ico" style="padding-left:4px">&#xF259;</span>
+          </div>
+        </div>   
+    </:else>
 
     <!-- middle left -->
-<:if test="{APP_IS_DISPLAY_LARGE}">    
-    <div class="f-ico" style="top:calc(60% - 100%e);left:calc(26% - 50%e)">&#xF262;</div>
-    <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(26% - 50%e)">
-      <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
-    </div>
-</:if>
-<:else>
-    <div style="top:48%;left:5%;width:43%;height:30%">
-      <div class="p-hc sp-vertical-center">
-        <span class="f-ico" style="padding-right:4px">&#xF262;</span>
-        <span class="sp-d-s f-num">
+    <!-- Max gradient -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(60% - 100%e);left:calc(26% - 50%e)">&#xF262;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(26% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
-        </span>
-      </div>
-    </div>
-</:else>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:5%;width:43%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF262;</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>
 
     <!-- middle right -->
-<:if test="{APP_IS_DISPLAY_LARGE}">    
-    <div class="f-ico" style="top:calc(60% - 100%e);left:calc(74% - 50%e)">&#xF263;</div>
-    <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(74% - 50%e)">
-      <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="VerticalSpeedMountain_Fourdigits" default="--" />
-    </div>
-</:if>
-<:else>
-    <div style="top:48%;left:51%;width:48%;height:30%">
-      <div class="p-hc sp-vertical-center">
-        <span class="sp-d-s f-num">
+    <!-- Total ascent -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(60% - 100%e);left:calc(74% - 50%e)">&#xF263;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(74% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="VerticalSpeedMountain_Fourdigits" default="--" />
-        </span>
-        <span class="f-ico" style="padding-left:4px">&#xF263;</span>
-      </div>
-    </div>
-</:else>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:51%;width:48%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="VerticalSpeedMountain_Fourdigits" default="--" />
+            </span>
+            <span class="f-ico" style="padding-left:4px">&#xF263;</span>
+          </div>
+        </div>
+    </:else>
 
     <!-- bottom middle -->
+    <!-- Climb category -->
     <div class="sp-t-l p-hc" style="top:calc(80% - 50%e)">
       <span id="category-value" class="sp-t-l">--</span>
     </div>
