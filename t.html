@@ -97,14 +97,14 @@
     <:if test="{APP_IS_DISPLAY_LARGE}">    
         <div class="f-ico" style="top:calc(60% - 100%e);left:calc(74% - 50%e)">&#xF263;</div>
         <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(74% - 50%e)">
-          <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="VerticalSpeedMountain_Fourdigits" default="--" />
+          <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="Ascent_Fourdigits" default="--" />
         </div>
     </:if>
     <:else>
         <div style="top:48%;left:51%;width:48%;height:30%">
           <div class="p-hc sp-vertical-center">
             <span class="sp-d-s f-num">
-              <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="VerticalSpeedMountain_Fourdigits" default="--" />
+              <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="Ascent_Fourdigits" default="--" />
             </span>
             <span class="f-ico" style="padding-left:4px">&#xF263;</span>
           </div>
