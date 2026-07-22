@@ -1,5 +1,5 @@
 {
-  "name": "Cycling Climbing Categories",
+  "name": "Velo Climb",
   "version": "1.0",
   "author": "Panagiotis Kritikakos - panoskrt@gmail.com",
   "description": "Gradient, VAM and climb category",
@@ -12,7 +12,13 @@
     { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" },
     { "name": "ascentTime", "source": "Fusion/Altitude/AscentTime", "type": "subscribe" }
   ],
-  "out": [{ "name": "gradient", "log": true }, { "name": "vam", "log": true }, { "name": "category" }, { "name": "maxgradient" }, { "name": "totalAscent" }],
+  "out": [
+    { "name": "gradient", "log": true },
+    { "name": "vam", "log": true },
+    { "name": "category" },
+    { "name": "maxgradient", "log": true },
+    { "name": "totalAscent" }
+  ],
   "template": [{ "name": "t.html" }],
   "image": []
 }

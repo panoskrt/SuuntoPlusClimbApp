@@ -15,8 +15,6 @@ var CLIMB_CAT1 = 10; // < 10%: hard - orange
 var CLIMB_HC = 12;   // < 12%: very hard - red
                      // >= 12%: HC+, very very hard - dark red
 
-var UPDATE_INTERVAL_SECONDS = 2;
-
 var smoothedGradient;
 var updateCounter;
 var maxgradient;
@@ -50,31 +48,25 @@ function evaluate(input, output) {
     maxgradient = smoothedGradient;
   }
 
-  updateCounter += 1;
-  if (updateCounter >= UPDATE_INTERVAL_SECONDS) {
-    updateCounter = 0;
-    output.gradient = smoothedGradient;
-    output.maxgradient = maxgradient;
-    output.totalAscent = input.ascent;
-    output.vam = input.ascent / input.ascentTime;
+  output.gradient = smoothedGradient;
+  output.maxgradient = maxgradient;
+  output.totalAscent = input.ascent;
+  output.vam = input.ascent / input.ascentTime;
 
-    // Classify the current (smoothed) gradient into a climb category. Category
-    // numbers must match the keyValue map in t.html: 0=Flat (easiest) .. 6=HC+ (hardest).
-    if (smoothedGradient < CLIMB_FLAT) {
-      output.category = 0; // Flat
-    } else if (smoothedGradient < CLIMB_CAT4) {
-      output.category = 1; // Cat4 - very easy
-    } else if (smoothedGradient < CLIMB_CAT3) {
-      output.category = 2; // Cat3 - easy
-    } else if (smoothedGradient < CLIMB_CAT2) {
-      output.category = 3; // Cat2 - moderate
-    } else if (smoothedGradient < CLIMB_CAT1) {
-      output.category = 4; // Cat1 - hard
-    } else if (smoothedGradient < CLIMB_HC) {
-      output.category = 5; // HC - very hard
-    } else {
-      output.category = 6; // HC+ - hardest
-    }
+  if (smoothedGradient < CLIMB_FLAT) {
+    output.category = 0; // Flat
+  } else if (smoothedGradient < CLIMB_CAT4) {
+    output.category = 1; // Cat4 - very easy
+  } else if (smoothedGradient < CLIMB_CAT3) {
+    output.category = 2; // Cat3 - easy
+  } else if (smoothedGradient < CLIMB_CAT2) {
+    output.category = 3; // Cat2 - moderate
+  } else if (smoothedGradient < CLIMB_CAT1) {
+    output.category = 4; // Cat1 - hard
+  } else if (smoothedGradient < CLIMB_HC) {
+    output.category = 5; // HC - very hard
+  } else {
+    output.category = 6; // HC+ - hardest
   }
 }
 
@@ -108,13 +100,13 @@ function getSummaryOutputs(input, output) {
     {
       id: 'gradient',
       name: 'Avg gradient',
-      format: 'VerticalSpeedMountain_Fourdigits',
+      format: 'Percentage_Fourdigits',
       value: output.gradient
     },
     {
       id: 'maxGradient',
       name: 'Max gradient',
-      format: 'VerticalSpeedMountain_Fourdigits',
+      format: 'Percentage_Fourdigits',
       value: output.maxgradient
     }
   ];
