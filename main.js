@@ -51,7 +51,9 @@ function evaluate(input, output) {
   output.gradient = smoothedGradient;
   output.maxgradient = maxgradient;
   output.totalAscent = input.ascent;
-  output.vam = input.ascent / input.ascentTime;
+  //output.vam = input.ascent / input.ascentTime;
+  //output.vam = hasRealTelemetry && input.vSpeed > 0 ? input.vSpeed * 3600 : 0;
+  output.vam = input.vSpeed;
 
   if (smoothedGradient < CLIMB_FLAT) {
     output.category = 0; // Flat
