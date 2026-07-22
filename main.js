@@ -13,7 +13,7 @@ var CLIMB_CAT3 = 7;  // < 7%: easy - blue
 var CLIMB_CAT2 = 8;  // < 8%: moderate - yellow
 var CLIMB_CAT1 = 10; // < 10%: hard - orange
 var CLIMB_HC = 12;   // < 12%: very hard - red
-                    // >= 12%: HC+, very very hard - dark red
+                     // >= 12%: HC+, very very hard - dark red
 
 var UPDATE_INTERVAL_SECONDS = 2;
 
@@ -55,8 +55,8 @@ function evaluate(input, output) {
     updateCounter = 0;
     output.gradient = smoothedGradient;
     output.maxgradient = maxgradient;
-    output.totalAscent = Math.round(input.ascent);
-    output.vam = Math.round(input.ascent / input.ascentTime);
+    output.totalAscent = input.ascent;
+    output.vam = input.ascent / input.ascentTime;
 
     // Classify the current (smoothed) gradient into a climb category. Category
     // numbers must match the keyValue map in t.html: 0=Flat (easiest) .. 6=HC+ (hardest).
@@ -108,13 +108,13 @@ function getSummaryOutputs(input, output) {
     {
       id: 'gradient',
       name: 'Avg gradient',
-      format: 'Percentage_Fourdigits',
+      format: 'VerticalSpeedMountain_Fourdigits',
       value: output.gradient
     },
     {
       id: 'maxGradient',
       name: 'Max gradient',
-      format: 'Percentage_Fourdigits',
+      format: 'VerticalSpeedMountain_Fourdigits',
       value: output.maxgradient
     }
   ];
