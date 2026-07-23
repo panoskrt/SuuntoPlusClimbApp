@@ -6,6 +6,11 @@ var MIN_SPEED = 0.3; // m/s
 // noise, high enough to still react within a few seconds of a slope change.
 var GRADIENT_ALPHA = 0.2;
 
+// VAM is averaged over a rolling window instead of the whole session, so it
+// reflects current effort rather than a slow-moving all-ride average. Assumes
+// evaluate() runs about once per second, per the comment on evaluate() below.
+var VAM_WINDOW_SECONDS = 30;
+
 // Climb category thresholds, in percent gradient. Values fixed to match the comments
 var CLIMB_FLAT = 2;  // < 2%: flat - gray
 var CLIMB_CAT4 = 5;  // < 5%: very easy - green
@@ -18,11 +23,13 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
 var smoothedGradient;
 var updateCounter;
 var maxgradient;
+var ascentHistory;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
   updateCounter = 0;
   maxgradient = 0;
+  ascentHistory = [];
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
@@ -51,9 +58,14 @@ function evaluate(input, output) {
   output.gradient = smoothedGradient;
   output.maxgradient = maxgradient;
   output.totalAscent = input.ascent;
-  //output.vam = input.ascent / input.ascentTime;
-  //output.vam = hasRealTelemetry && input.vSpeed > 0 ? input.vSpeed * 3600 : 0;
-  output.vam = input.vSpeed;
+
+  // VAM (m/s) = ascent gained over the last VAM_WINDOW_SECONDS, i.e. the slope of
+  // the ascent curve over that window rather than the whole-session average.
+  ascentHistory.push(input.ascent);
+  if (ascentHistory.length > VAM_WINDOW_SECONDS + 1) ascentHistory.shift();
+  output.vam = ascentHistory.length > 1
+    ? (input.ascent - ascentHistory[0]) / (ascentHistory.length - 1)
+    : 0;
 
   if (smoothedGradient < CLIMB_FLAT) {
     output.category = 0; // Flat
