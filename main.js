@@ -21,13 +21,11 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
                      // >= 12%: HC+, very very hard - dark red
 
 var smoothedGradient;
-var updateCounter;
 var maxgradient;
 var ascentHistory;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
-  updateCounter = 0;
   maxgradient = 0;
   ascentHistory = [];
   output.gradient = 0;
