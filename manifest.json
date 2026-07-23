@@ -9,7 +9,7 @@
   "in": [
     { "name": "speed", "source": "Activity/Current/Speed", "type": "subscribe" },
     { "name": "vSpeed", "source": "Fusion/Altitude/VerticalSpeed", "type": "subscribe" },
-    { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" },
+    { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" }
   ],
   "out": [
     { "name": "gradient", "log": true },
