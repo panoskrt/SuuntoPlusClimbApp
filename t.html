@@ -23,7 +23,7 @@
 
     <!-- Title and its background -->
     <div class="cm-fg" style="width:100%;height:24%;">
-      <div class="sp-t-l p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
+      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
     </div>
 
     <!-- vertical separator -->
@@ -57,7 +57,7 @@
     <!-- top right -->
     <!-- VAM -->
     <:if test="{APP_IS_DISPLAY_LARGE}">    
-        <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF259;</div>
+        <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF261;</div>
         <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
         </div>
@@ -68,7 +68,7 @@
             <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
               <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
             </span>
-            <span class="f-ico" style="padding-left:4px">&#xF259;</span>
+            <span class="f-ico" style="padding-left:4px">&#xF261;</span>
           </div>
         </div>   
     </:else>
@@ -116,6 +116,11 @@
     <div class="sp-t-l p-hc" style="top:calc(80% - 50%e)">
       <span id="category-value" class="sp-t-l">--</span>
     </div>
+
+    <userInput>
+      <!-- Switch view when lower button is pressed -->
+      <pushButton name="down" onClick="$.put('/Zapp/{zapp_index}/Event', 2, null, 'int32');" />
+    </userInput>
 
   </div>
 

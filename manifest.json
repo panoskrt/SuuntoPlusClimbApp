@@ -16,8 +16,9 @@
     { "name": "vam", "log": true },
     { "name": "category" },
     { "name": "maxgradient", "log": true },
-    { "name": "totalAscent" }
+    { "name": "totalAscent" },
+    { "name": "avgGradient", "log": true }
   ],
-  "template": [{ "name": "t.html" }],
+  "template": [{ "name": "t.html" }, { "name": "t2.html" }],
   "image": []
 }

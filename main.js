@@ -23,16 +23,30 @@ var CLIMB_HC = 12;   // < 12%: very hard - red
 var smoothedGradient;
 var maxgradient;
 var ascentHistory;
+var gradientSum;
+var gradientSamples;
+var currentTemplate;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
   maxgradient = 0;
   ascentHistory = [];
+  gradientSum = 0;
+  gradientSamples = 0;
+  currentTemplate = 't';
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
   output.maxgradient = 0;
   output.totalAscent = 0;
+  output.avgGradient = 0;
+}
+
+// Fired when the up/down button is pressed (see the <userInput> block in
+// t.html/t2.html), toggling between the Climb screen and the Profile screen.
+function onEvent(input, output, eventId) {
+  currentTemplate = currentTemplate === 't' ? 't2' : 't';
+  unload('_cm');
 }
 
 // System starts calling this about once per second after the sports app is selected
@@ -48,6 +62,8 @@ function evaluate(input, output) {
     if (rawGradient > 60) rawGradient = 60;
     if (rawGradient < -60) rawGradient = -60;
     smoothedGradient = smoothedGradient + GRADIENT_ALPHA * (rawGradient - smoothedGradient);
+    gradientSum += smoothedGradient;
+    gradientSamples++;
   }
   if (smoothedGradient > maxgradient) {
     maxgradient = smoothedGradient;
@@ -56,6 +72,7 @@ function evaluate(input, output) {
   output.gradient = smoothedGradient;
   output.maxgradient = maxgradient;
   output.totalAscent = input.ascent;
+  output.avgGradient = gradientSamples > 0 ? gradientSum / gradientSamples : 0;
 
   // VAM (m/s) = ascent gained over the last VAM_WINDOW_SECONDS, i.e. the slope of
   // the ascent curve over that window rather than the whole-session average.
@@ -97,7 +114,7 @@ function onPoolLength() {}       // Is evaluated after each pool length (swimmin
 // the screen by returning the wanted HTML template.
 function getUserInterface() {
   return {
-    template: 't'
+    template: currentTemplate
   };
 }
 
@@ -113,7 +130,7 @@ function getSummaryOutputs(input, output) {
       id: 'gradient',
       name: 'Avg gradient',
       format: 'Percentage_Fourdigits',
-      value: output.gradient
+      value: output.avgGradient
     },
     {
       id: 'maxGradient',

@@ -14,6 +14,8 @@ Gradient is computed as vertical speed over ground speed (`vSpeed / speed * 100`
 
 VAM is `ascent / ascentTime` (`Fusion/Altitude/Ascent` and `Fusion/Altitude/AscentTime`), so flat sections and descents don't dilute the rate.
 
+Average gradient is the mean of the smoothed gradient across all samples taken while riding (ground speed above the noise floor), tracked as a running sum/count in `main.js`. This is also what's reported as "Avg gradient" in the exercise summary.
+
 The smoothed gradient is classified into one of seven categories:
 
 | Category | Gradient    | Color     |
@@ -28,7 +30,12 @@ The smoothed gradient is classified into one of seven categories:
 
 ## On-watch display
 
-The `t.html` template shows a "Climb" screen with the current Gradient and VAM values, and the Category name in its corresponding color underneath. The exercise summary additionally reports average VAM and average gradient for the whole session.
+The app has two screens, toggled with the watch's down button (see `onEvent` in `main.js`):
+
+- `t.html` — the "Climb" screen, showing the current Gradient and VAM values, max gradient, total ascent, and the Category name in its corresponding color underneath.
+- `t2.html` — the "Profile" screen, showing climb duration (`Fusion/Altitude/AscentTime`), average gradient for the session so far, and a live altitude profile graph subscribed to `Activity/Move/-1/Altitude/Current`.
+
+The exercise summary additionally reports average VAM and average gradient for the whole session.
 
 ## Debug mode
 
@@ -37,8 +44,9 @@ Since the bundled SuuntoPlus simulator doesn't feed real vertical-speed/altitude
 ## Project structure
 
 - `manifest.json` — Zapp descriptor: declared inputs/outputs and app metadata.
-- `main.js` — gradient/VAM computation and category classification logic.
-- `t.html` — on-watch UI template.
+- `main.js` — gradient/VAM computation, category classification logic, and screen-toggle handling.
+- `t.html` — "Climb" screen template.
+- `t2.html` — "Profile" screen template (climb duration, average gradient, altitude graph).
 
 ## License
 
