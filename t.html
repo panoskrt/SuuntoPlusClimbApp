@@ -11,6 +11,7 @@
       { text: 'HC',   color: '#BD0202' },
       { text: 'HC+',  color: '#800000' }
     ];
+    
     categorySubscription = $.subscribe('Zapp/{zapp_index}/Output/category', function(v) {
       var info = categoryInfo[v] || categoryInfo[0];
       setText('#category-value', info.text);

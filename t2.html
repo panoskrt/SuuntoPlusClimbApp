@@ -12,14 +12,14 @@
     <!-- top left -->
     <!-- Climb duration -->
     <:if test="{APP_IS_DISPLAY_LARGE}">
-        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(26% - 50%e)">Climb time</div>
+        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(26% - 50%e)">CLIMB</div>
         <div class="f-ico" style="top:calc(32% - 100%e);left:calc(26% - 50%e)">&#xF259;</div>
         <div class="sp-d-m f-num" style="top:calc(42% - 50%e);left:calc(26% - 50%e)">
           <eval input="/Fusion/Altitude/AscentTime" outputFormat="AscentDuration_Fourdigits" default="--"/>
         </div>
     </:if>
     <:else>
-        <div class="sp-t-s cm-mid" style="top:19%;left:3%;width:46%;text-align:center;">Climb time</div>
+        <div class="sp-t-s cm-mid" style="top:19%;left:3%;width:46%;text-align:center;">CLIMB</div>
         <div style="top:27%;left:3%;width:46%;height:24%">
           <div class="p-hc sp-vertical-center">
             <span class="f-ico" style="padding-right:4px">&#xF259;</span>
@@ -33,14 +33,14 @@
     <!-- top right -->
     <!-- Average gradient -->
     <:if test="{APP_IS_DISPLAY_LARGE}">
-        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(74% - 50%e)">Avg grad</div>
+        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(74% - 50%e)">AVG</div>
         <div class="sp-d-m" style="top:calc(32% - 100%e);left:calc(74% - 50%e)">%</div>
         <div class="sp-d-m f-num" style="top:calc(42% - 50%e);left:calc(74% - 50%e)">
           <eval input="/Zapp/{zapp_index}/Output/avgGradient" outputFormat="Percentage_Fourdigits" default="--"/>
         </div>
     </:if>
     <:else>
-        <div class="sp-t-s cm-mid" style="top:19%;left:51%;width:46%;text-align:center;">Avg grad</div>
+        <div class="sp-t-s cm-mid" style="top:19%;left:51%;width:46%;text-align:center;">AVG</div>
         <div style="top:27%;left:51%;width:46%;height:24%">
           <div class="p-hc sp-vertical-center">
             <span class="sp-d-s f-num">
@@ -52,9 +52,6 @@
     </:else>
 
     <!-- bottom: altitude profile graph -->
-    <!-- Kept well inside the round bezel: at width:84%/height:30% the box's
-         right and bottom edges fell outside the circular display area, which
-         is why the grid-line labels near the bottom-right were being clipped. -->
     <div id="graph" style="left:13%; top:55%; width:72%; height:26%;">
       <graph style="position:absolute;
                     left:0; top:0; width:100%; height:100%;
@@ -69,7 +66,7 @@
             grid="three lines"
             inputType="subscribe"
             input="/Activity/Move/-1/Altitude/Current"
-            min="0"/>
+            min="0" />
     </div>
 
     <userInput>
