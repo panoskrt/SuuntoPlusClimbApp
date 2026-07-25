@@ -26,7 +26,6 @@ var ascentHistory;
 var gradientSum;
 var gradientSamples;
 var currentTemplate;
-var cCategory;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
@@ -38,6 +37,7 @@ function onLoad(input, output) {
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
+  output.categoryGroup = 0;
   output.maxgradient = 0;
   output.totalAscent = 0;
   output.avgGradient = 0;
@@ -85,20 +85,26 @@ function evaluate(input, output) {
 
   if (smoothedGradient < CLIMB_FLAT) {
     output.category = 0; // Flat
+    output.categoryGroup = 0;
   } else if (smoothedGradient < CLIMB_CAT4) {
     output.category = 1; // Cat4 - very easy
+    output.categoryGroup = 1;
   } else if (smoothedGradient < CLIMB_CAT3) {
     output.category = 2; // Cat3 - easy
+    output.categoryGroup = 1;
   } else if (smoothedGradient < CLIMB_CAT2) {
     output.category = 3; // Cat2 - moderate
+    output.categoryGroup = 2;
   } else if (smoothedGradient < CLIMB_CAT1) {
     output.category = 4; // Cat1 - hard
+    output.categoryGroup = 3;
   } else if (smoothedGradient < CLIMB_HC) {
     output.category = 5; // HC - very hard
+    output.categoryGroup = 4;
   } else {
     output.category = 6; // HC+ - hardest
+    output.categoryGroup = 4;
   }
-  cCategory = output.category;
 }
 
 /* Other available callbacks:

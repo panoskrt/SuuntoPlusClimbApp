@@ -4,14 +4,7 @@ onLoad="
     var g = typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : Function('return this')());
     g.g = g;
 
-    g.cCatergory = 0;
-
-    g.updateHRColors = function() {
-        var colors = ['#FFFFFF', '#005E1F', '#003DB8', '#AD9207', '#995D03', '#BD0202'];
-        var color = colors[g.catergory] || '#888888';
-        setStyle('#hr-heart-ico', 'color', color);
-        setStyle('#hr-val-text', 'color', color);
-    };
+    g.categoryGroup = 0;
 
     g.drawClimbingUI = function(ctx) {
       var cx = ctx.width / 2;
@@ -31,7 +24,7 @@ onLoad="
       }
       
       // 2. Render the official 5-segment corona on top
-      var climbingCategory = Number(g.cCatergory) || 0;
+      var climbingCategory = Number(g.categoryGroup) || 0;
       if (typeof buildGenericGauge === 'function') {
         buildGenericGauge(ctx, climbingCategory, 0, 4, 1, 5);
       } else {
@@ -88,7 +81,6 @@ onLoad="
       }
     };
   "
-
   onActivate="
     var categoryInfo = [
       { text: 'Flat', color: '' },
@@ -104,6 +96,7 @@ onLoad="
       var info = categoryInfo[v] || categoryInfo[0];
       setText('#category-value', info.text);
       setStyle('#category-value', 'color', info.color);
+      g.categoryGroup = v;
     });
   "
   onDeactivate="$.unsubscribe(categorySubscription);">
@@ -206,6 +199,10 @@ onLoad="
     <!-- Climb category -->
     <div class="sp-t-l p-hc" style="top:calc(80% - 50%e)">
       <span id="category-value" class="sp-t-l">--</span>
+    </div>
+
+    <div style="top:0; left:0; width:0px; height:0px; position:absolute;">
+        <eval input="/Zapp/{zapp_index}/Output/categoryGroup" outputFormat="script x => x" default="0" onValueChanged="g.category = Number(targetData) || 0; control('#climbGauge', 'REFRESH');" />
     </div>
 
     <userInput>
