@@ -26,6 +26,7 @@ var ascentHistory;
 var gradientSum;
 var gradientSamples;
 var currentTemplate;
+var cCategory;
 
 function onLoad(input, output) {
   smoothedGradient = 0;
@@ -97,6 +98,7 @@ function evaluate(input, output) {
   } else {
     output.category = 6; // HC+ - hardest
   }
+  cCategory = output.category;
 }
 
 /* Other available callbacks:

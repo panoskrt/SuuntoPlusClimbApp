@@ -1,5 +1,93 @@
 <uiView
-  onLoad="var categorySubscription;"
+onLoad="
+    var categorySubscription;
+    var g = typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : Function('return this')());
+    g.g = g;
+
+    g.cCatergory = 0;
+
+    g.updateHRColors = function() {
+        var colors = ['#FFFFFF', '#005E1F', '#003DB8', '#AD9207', '#995D03', '#BD0202'];
+        var color = colors[g.catergory] || '#888888';
+        setStyle('#hr-heart-ico', 'color', color);
+        setStyle('#hr-val-text', 'color', color);
+    };
+
+    g.drawClimbingUI = function(ctx) {
+      var cx = ctx.width / 2;
+      var cy = ctx.width / 2;
+
+      // 1. Draw top curved banner
+      var r = ctx.width / 2 - 10; 
+      var dy = 0.20 * ctx.width - cy; // Adjusted to make banner thinner
+      if (r > Math.abs(dy)) {
+        var end = Math.asin(dy / r);
+        var start = -Math.PI - end;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, start, end, false);
+        ctx.closePath();
+        ctx.fillStyle = '#008000';
+        ctx.fill();
+      }
+      
+      // 2. Render the official 5-segment corona on top
+      var climbingCategory = Number(g.cCatergory) || 0;
+      if (typeof buildGenericGauge === 'function') {
+        buildGenericGauge(ctx, climbingCategory, 0, 4, 1, 5);
+      } else {
+        // Fallback manual 5-segment drawing for the emulator
+        var startAngle = 3 * Math.PI / 4;
+        var endAngle = 9 * Math.PI / 4;
+        var totalAngle = endAngle - startAngle;
+        var segmentAngle = totalAngle / 5;
+        var gap = 0.06;
+        var zColors = ['#FFFFFF', '#005E1F', '#003DB8', '#AD9207', '#995D03', '#BD0202'];
+        
+        ctx.lineCap = 'butt';
+        for (var i = 0; i < 5; i++) {
+          var sA = startAngle + i * segmentAngle + gap/2;
+          var eA = startAngle + (i+1) * segmentAngle - gap/2;
+          var isActive = (climbingCategory === i + 1);
+          ctx.lineWidth = isActive ? 8 : 4;
+          ctx.strokeStyle = isActive ? zColors[i] : '#666666';
+          ctx.beginPath();
+          ctx.arc(cx, cy, (ctx.width - ctx.lineWidth) / 2 - 2, sA, eA, false);
+          ctx.stroke();
+        }
+      }
+
+      // 3. Draw Needle (Flecha) pointing to the current climbingCategory
+      if (climbingCategory >= 1 && climbingCategory <= 5) {
+        var nStart = 3 * Math.PI / 4;
+        var nTotal = (9 * Math.PI / 4) - nStart;
+        var nSeg = nTotal / 5;
+        // Point exactly to the middle of the active climbingCategory
+        var angle = nStart + (climbingCategory - 1) * nSeg + (nSeg / 2);
+        
+        var rb = ctx.width / 2 - 2;  // Base of needle
+        var rt = ctx.width / 2 - 20; // Tip of needle
+        var bHalf = 0.055;
+
+        var xTip = cx + rt * Math.cos(angle);
+        var yTip = cy + rt * Math.sin(angle);
+        var xBase1 = cx + rb * Math.cos(angle - bHalf);
+        var yBase1 = cy + rb * Math.sin(angle - bHalf);
+        var xBase2 = cx + rb * Math.cos(angle + bHalf);
+        var yBase2 = cy + rb * Math.sin(angle + bHalf);
+
+        ctx.beginPath();
+        ctx.moveTo(xTip, yTip);
+        ctx.lineTo(xBase1, yBase1);
+        ctx.lineTo(xBase2, yBase2);
+        ctx.closePath();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    };
+  "
 
   onActivate="
     var categoryInfo = [
@@ -22,10 +110,12 @@
 
   <div id="suuntoplus">
 
+    <object type="canvas" id="climbGauge" style="position:absolute; top:0; left:0; width:100%; height:100%;" build="ctx => g.drawClimbingUI(ctx);" />
+
     <!-- Title and its background -->
-    <div class="cm-fg" style="width:100%;height:24%;">
-      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
-    </div>
+        <div class="sp-t-m p-hc" style="top:calc(12% - 50%e); color:#000000; font-weight:bold; position:absolute; line-height:1; text-align:center;">
+            Velo Climb
+        </div>
 
     <!-- vertical separator -->
     <div class="cm-fg p-hc" style="top:32%;width:2px;height:43%;opacity:0.4"></div>
