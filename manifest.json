@@ -15,7 +15,6 @@
     { "name": "gradient", "log": true },
     { "name": "vam", "log": true },
     { "name": "category" },
-    { "name": "categoryGroup" },
     { "name": "maxgradient", "log": true },
     { "name": "totalAscent" },
     { "name": "avgGradient", "log": true }

@@ -12,6 +12,7 @@ var GRADIENT_ALPHA = 0.2;
 var VAM_WINDOW_SECONDS = 30;
 
 // Climb category thresholds, in percent gradient. Values fixed to match the comments
+var DESCENT = 0;      // < 0%: descent - blue
 var CLIMB_FLAT = 2;  // < 2%: flat - gray
 var CLIMB_CAT4 = 5;  // < 5%: very easy - green
 var CLIMB_CAT3 = 7;  // < 7%: easy - blue
@@ -37,7 +38,6 @@ function onLoad(input, output) {
   output.gradient = 0;
   output.vam = 0;
   output.category = 0;
-  output.categoryGroup = 0;
   output.maxgradient = 0;
   output.totalAscent = 0;
   output.avgGradient = 0;
@@ -83,27 +83,22 @@ function evaluate(input, output) {
     ? (input.ascent - ascentHistory[0]) / (ascentHistory.length - 1)
     : 0;
 
-  if (smoothedGradient < CLIMB_FLAT) {
-    output.category = 0; // Flat
-    output.categoryGroup = 0;
+  if (smoothedGradient < DESCENT) {
+    output.category = 0; // Descent
+  } else if (smoothedGradient < CLIMB_FLAT) {
+    output.category = 1; // Flat
   } else if (smoothedGradient < CLIMB_CAT4) {
-    output.category = 1; // Cat4 - very easy
-    output.categoryGroup = 1;
+    output.category = 2; // Cat4 - very easy
   } else if (smoothedGradient < CLIMB_CAT3) {
-    output.category = 2; // Cat3 - easy
-    output.categoryGroup = 1;
+    output.category = 3; // Cat3 - easy
   } else if (smoothedGradient < CLIMB_CAT2) {
-    output.category = 3; // Cat2 - moderate
-    output.categoryGroup = 2;
+    output.category = 4; // Cat2 - moderate
   } else if (smoothedGradient < CLIMB_CAT1) {
-    output.category = 4; // Cat1 - hard
-    output.categoryGroup = 3;
+    output.category = 5; // Cat1 - hard
   } else if (smoothedGradient < CLIMB_HC) {
-    output.category = 5; // HC - very hard
-    output.categoryGroup = 4;
+    output.category = 6; // HC - very hard
   } else {
-    output.category = 6; // HC+ - hardest
-    output.categoryGroup = 4;
+    output.category = 7; // HC+ - hardest
   }
 }
 
@@ -116,6 +111,11 @@ function onAutoLap() {}          // Is evaluated on every autolap change
 function onInterval() {}         // Is evaluated on interval
 function onPoolLength() {}       // Is evaluated after each pool length (swimming)
 */
+
+//function onExercisePause(input, output) {
+  // TODO: Need to skip ascent calculation. Need to skip altitude graph
+  //return;
+//}
 
 // Is evaluated when a user enters the SuuntoPlus sports app screen the first
 // time and when the screen is reloaded. Essentially defines what is shown on
