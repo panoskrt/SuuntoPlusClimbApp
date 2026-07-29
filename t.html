@@ -9,21 +9,8 @@ onLoad="
     g.drawClimbingUI = function(ctx) {
       var cx = ctx.width / 2;
       var cy = ctx.width / 2;
-
-      // 1. Draw top curved banner
-      var r = ctx.width / 2 - 10; 
-      var dy = 0.20 * ctx.width - cy; // Adjusted to make banner thinner
-      if (r > Math.abs(dy)) {
-        var end = Math.asin(dy / r);
-        var start = -Math.PI - end;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, start, end, false);
-        ctx.closePath();
-        ctx.fillStyle = '#008000';
-        ctx.fill();
-      }
       
-      // 2. Render the official 5-segment corona on top
+      // Gauge segments based on the current climbingCategory
       var climbingCategory = Number(g.category) || 0;
 
       // Manual 7-segment corona drawing
@@ -49,7 +36,7 @@ onLoad="
         ctx.stroke(); 
       }
 
-      // 3. Draw Needle (Flecha) pointing to the current climbingCategory
+      // Needle pointing to the current climbingCategory
       if (climbingCategory >= minValue && climbingCategory <= maxValue) {
         var nStart = 3 * Math.PI / 4;
         var nTotal = (9 * Math.PI / 4) - nStart;
@@ -107,6 +94,11 @@ onLoad="
 
   <div id="suuntoplus">
 
+      <!-- Title and its background -->
+    <div class="cm-fg" style="width:100%;height:18%;">
+      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);"></div>
+    </div>
+
     <object type="canvas" id="climbGauge" style="position:absolute; top:0; left:0; width:100%; height:100%;" build="ctx => g.drawClimbingUI(ctx);" />
 
     <!-- Title and its background -->
@@ -160,6 +152,11 @@ onLoad="
           </div>
         </div>   
     </:else>
+
+    <div class="f-l f-num" style="top:calc(30% - 100%e);left:calc(50% - 50%e);text-align:center;">
+      <span class="f-ico" style="padding-right:4px">&#xF101;</span>
+        <eval input="/Activity/Move/-1/Heartrate/Current" outputFormat="HeartRate_Fourdigits" default="--"/>
+    </div>
 
     <!-- middle left -->
     <!-- Max gradient -->
