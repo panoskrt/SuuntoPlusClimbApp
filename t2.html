@@ -51,13 +51,27 @@
         </div>
     </:else>
 
-    <!-- bottom center -->
-    <div class="f-l f-num" style="top:calc(90% - 100%e);left:calc(50% - 50%e);text-align:center;">
-      <span class="f-ico-l" style="padding-right:4px">&#xE004;</span>
-        <eval input="/Activity/Move/-1/Cadence/Current" outputFormat="HeartRate_Fourdigits" default="--"/>
-    </div>
+    <!-- bottom middle -->
+    <!-- Remaining ascent -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(65% - 100%e);left:calc(36% - 50%e)">&#xF322;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 100%e);left:calc(50% - 50%e)">
+          <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:25%;width:43%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF322;</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>   
 
     <!-- bottom: altitude profile graph -->
+  <!--
     <div id="graph" style="left:13%; top:55%; width:72%; height:26%;">
       <graph style="position:absolute;
                     left:0; top:0; width:100%; height:100%;
@@ -74,6 +88,7 @@
             input="/Activity/Move/-1/Altitude/Current"
             min="0" />
     </div>
+  -->
 
     <userInput>
       <!-- Switch view when lower button is pressed -->
