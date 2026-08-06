@@ -101,9 +101,6 @@ onLoad="
 
     <object type="canvas" id="climbGauge" style="position:absolute; top:0; left:0; width:100%; height:100%;" build="ctx => g.drawClimbingUI(ctx);" />
 
-    <!-- vertical separator -->
-    <div class="cm-fg p-hc" style="top:32%;width:2px;height:43%;opacity:0.4"></div>
-
     <!-- Note!
       On large display icons are on the top of the value
       and on medium and small displays icons are on the left or right of the value
@@ -148,9 +145,9 @@ onLoad="
         </div>   
     </:else>
 
-    <div class="f-l f-num" style="top:calc(30% - 100%e);left:calc(50% - 50%e);text-align:center;">
-      <span class="f-ico" style="padding-right:4px">&#xF101;</span>
-        <eval input="/Activity/Move/-1/Heartrate/Current" outputFormat="HeartRate_Fourdigits" default="--"/>
+    <span class="f-ico" style="top:calc(45% - 50%e);left:calc(50% - 50%e);text-align:center;">&#xF101;</span>
+    <div class="f-l f-num" style="top:calc(53% - 50%e);left:calc(50% - 50%e);text-align:center;">
+      <eval input="/Activity/Move/-1/Heartrate/Current" outputFormat="HeartRate_Fourdigits" default="--"/>
     </div>
 
     <!-- middle left -->

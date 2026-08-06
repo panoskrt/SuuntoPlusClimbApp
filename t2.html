@@ -5,10 +5,7 @@
     <div class="cm-fg" style="width:100%;height:18%;">
       <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);padding-top:10px;">Velo Climb</div>
     </div>
-
-    <!-- vertical separator -->
-    <div class="cm-fg p-hc" style="top:20%;width:2px;height:32%;opacity:0.4"></div>
-
+    
     <!-- top left -->
     <!-- Climb duration -->
     <:if test="{APP_IS_DISPLAY_LARGE}">
@@ -54,7 +51,7 @@
     <!-- bottom middle -->
     <!-- Remaining ascent -->
     <:if test="{APP_IS_DISPLAY_LARGE}">    
-        <div class="f-ico" style="top:calc(65% - 100%e);left:calc(36% - 50%e)">&#xF322;</div>
+        <div class="f-ico" style="top:calc(65% - 100%e);left:calc(36% - 50%e)">&#xF256;</div>
         <div class="sp-d-s f-num" style="top:calc(66% - 100%e);left:calc(50% - 50%e)">
           <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
         </div>
@@ -62,7 +59,7 @@
     <:else>
         <div style="top:48%;left:25%;width:43%;height:30%">
           <div class="p-hc sp-vertical-center">
-            <span class="f-ico" style="padding-right:4px">&#xF322;</span>
+            <span class="f-ico" style="padding-right:4px">&#xF256;</span>
             <span class="sp-d-s f-num">
               <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
             </span>
