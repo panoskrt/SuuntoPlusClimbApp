@@ -3,12 +3,9 @@
 
     <!-- Title and its background -->
     <div class="cm-fg" style="width:100%;height:18%;">
-      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
+      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);padding-top:10px;">Velo Climb</div>
     </div>
-
-    <!-- vertical separator -->
-    <div class="cm-fg p-hc" style="top:20%;width:2px;height:32%;opacity:0.4"></div>
-
+    
     <!-- top left -->
     <!-- Climb duration -->
     <:if test="{APP_IS_DISPLAY_LARGE}">
@@ -51,23 +48,24 @@
         </div>
     </:else>
 
-    <!-- bottom: altitude profile graph -->
-    <div id="graph" style="left:13%; top:55%; width:72%; height:26%;">
-      <graph style="position:absolute;
-                    left:0; top:0; width:100%; height:100%;
-                    padding-top: 5px;
-                    padding-bottom: 10px;
-                    padding-right:45px;
-                    box-sizing: border-box;
-                    font-size:6px;
-                    fill-color:rgba(0, 114, 2, 0.7);"
-            valueFormat="Altitude_Fourdigits"
-            type="line"
-            grid="three lines"
-            inputType="subscribe"
-            input="/Activity/Move/-1/Altitude/Current"
-            min="0" />
-    </div>
+    <!-- bottom middle -->
+    <!-- Remaining ascent -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(65% - 100%e);left:calc(36% - 50%e)">&#xF256;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 100%e);left:calc(50% - 50%e); color:rgb(255, 0, 0);">
+          <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:25%;width:43%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF256;</span>
+            <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
+              <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>   
 
     <userInput>
       <!-- Switch view when lower button is pressed -->

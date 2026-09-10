@@ -59,14 +59,14 @@
     <!-- VAM -->
     <:if test="{APP_IS_DISPLAY_LARGE}">    
         <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF261;</div>
-        <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)">
+        <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)"  style="color:rgb(0, 187, 25);">
           <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
         </div>
     </:if>
     <:else>
         <div style="top:26%;left:51%;width:46%;height:30%">
           <div class="p-hc sp-vertical-center">
-            <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
+            <span class="sp-d-s f-num" style="color:rgb(0, 187, 25);">
               <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
             </span>
             <span class="f-ico" style="padding-left:4px">&#xF261;</span>
