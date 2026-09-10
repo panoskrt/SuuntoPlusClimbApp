@@ -1,18 +1,24 @@
 {
-  "name": "Cycling Climbing Categories",
+  "name": "Velo Climb",
   "version": "1.0",
   "author": "Panagiotis Kritikakos - panoskrt@gmail.com",
-  "description": "Gradient, VAM and climb category",
+  "description": "Cycling targetted climbing app. Gradient info, ascent info, cycling climbing categorization.",
   "type": "feature",
   "usage": "workout",
   "modificationTime": 1784592000,
   "in": [
     { "name": "speed", "source": "Activity/Current/Speed", "type": "subscribe" },
     { "name": "vSpeed", "source": "Fusion/Altitude/VerticalSpeed", "type": "subscribe" },
-    { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" },
-    { "name": "ascentTime", "source": "Fusion/Altitude/AscentTime", "type": "subscribe" }
+    { "name": "ascent", "source": "Fusion/Altitude/Ascent", "type": "subscribe" }
   ],
-  "out": [{ "name": "gradient", "log": true }, { "name": "vam", "log": true }, { "name": "category" }, { "name": "maxgradient" }],
-  "template": [{ "name": "t.html" }],
+  "out": [
+    { "name": "gradient", "log": true },
+    { "name": "vam", "log": true },
+    { "name": "category" },
+    { "name": "maxgradient", "log": true },
+    { "name": "totalAscent" },
+    { "name": "avgGradient", "log": true }
+  ],
+  "template": [{ "name": "t.html" }, { "name": "t2.html" }],
   "image": []
 }

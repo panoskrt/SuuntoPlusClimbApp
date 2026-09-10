@@ -1,66 +1,127 @@
 <uiView
-  onLoad="
-    var categorySubscription;
-  "
+  onLoad="var categorySubscription;"
+
   onActivate="
-    // Category text + color per tier, matching main.js's CLIMB_* comments:
-    // gray -> green -> blue -> yellow -> orange -> red -> dark red.
-    // Colors are hardcoded hex rather than looked up via getStyle('css:.c-x')
-    // because not every watch display defines the same named color classes
-    // (e.g. plain .c-blue is missing on the newer 'q' display's stylesheet).
     var categoryInfo = [
-      { text: 'Flat', color: '#888' },
-      { text: 'Cat4', color: '#0F5' },
-      { text: 'Cat3', color: '#05F' },
-      { text: 'Cat2', color: '#FD3' },
-      { text: 'Cat1', color: '#F90' },
-      { text: 'HC',   color: '#F00' },
-      { text: 'HC+',  color: '#900' }
+      { text: 'Flat', color: '' },
+      { text: 'Cat4', color: '#005E1F' },
+      { text: 'Cat3', color: '#003DB8' },
+      { text: 'Cat2', color: '#AD9207' },
+      { text: 'Cat1', color: '#995D03' },
+      { text: 'HC',   color: '#BD0202' },
+      { text: 'HC+',  color: '#800000' }
     ];
+    
     categorySubscription = $.subscribe('Zapp/{zapp_index}/Output/category', function(v) {
       var info = categoryInfo[v] || categoryInfo[0];
       setText('#category-value', info.text);
       setStyle('#category-value', 'color', info.color);
     });
   "
-  onDeactivate="
-    $.unsubscribe(categorySubscription);
-  ">
+  onDeactivate="$.unsubscribe(categorySubscription);">
 
   <div id="suuntoplus">
 
-    <!-- Top title -->
+    <!-- Title and its background -->
     <div class="cm-fg" style="width:100%;height:24%;">
-      <div class="sp-t-s p-hc" style="top:calc(60% - 50%e);">Cycling Climb Category</div>
+      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);">Velo Climb</div>
     </div>
 
-    <!-- Top-left metric: Gradient -->
-    <div class="cm-mid sp-t-s" style="top:calc(38% - 100%e);left:calc(24% - 50%e);">Gradient</div>
-    <div class="sp-d-s f-num" style="top:calc(52% - 100%e);left:calc(24% - 50%e);">
-      <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
+    <!-- vertical separator -->
+    <div class="cm-fg p-hc" style="top:32%;width:2px;height:43%;opacity:0.4"></div>
+
+    <!-- Note!
+      On large display icons are on the top of the value
+      and on medium and small displays icons are on the left or right of the value
+      in this layout
+    -->
+
+    <!-- top left -->
+    <!-- Gradient -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">
+        <div class="sp-d-m" style="top:calc(35% - 100%e);left:calc(26% - 50%e)">%</div>
+        <div class="sp-d-m f-num" style="top:calc(41% - 50%e);left:calc(26% - 50%e)">
+          <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:26%;left:3%;width:46%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s" style="padding-right:4px; font-size:20px;">%</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/gradient" outputFormat="Percentage_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>
+
+    <!-- top right -->
+    <!-- VAM -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(35% - 100%e);left:calc(74% - 50%e)">&#xF261;</div>
+        <div class="sp-d-m f-num c-green" style="top:calc(41% - 50%e);left:calc(74% - 50%e)"  style="color:rgb(0, 187, 25);">
+          <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:26%;left:51%;width:46%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s f-num" style="color:rgb(0, 187, 25);">
+              <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
+            </span>
+            <span class="f-ico" style="padding-left:4px">&#xF261;</span>
+          </div>
+        </div>   
+    </:else>
+
+    <!-- middle left -->
+    <!-- Max gradient -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(60% - 100%e);left:calc(26% - 50%e)">&#xF262;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(26% - 50%e)">
+          <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="Percentage_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:5%;width:43%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF262;</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="Percentage_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>
+
+    <!-- middle right -->
+    <!-- Total ascent -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(60% - 100%e);left:calc(74% - 50%e)">&#xF263;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 50%e);left:calc(74% - 50%e)">
+          <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="Ascent_Fourdigits" default="--" />
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:51%;width:48%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/totalAscent" outputFormat="Ascent_Fourdigits" default="--" />
+            </span>
+            <span class="f-ico" style="padding-left:4px">&#xF263;</span>
+          </div>
+        </div>
+    </:else>
+
+    <!-- bottom middle -->
+    <!-- Climb category -->
+    <div class="sp-t-l p-hc" style="top:calc(80% - 50%e)">
+      <span id="category-value" class="sp-t-l">--</span>
     </div>
 
-    <!-- Top-right metric: VAM -->
-    <div class="cm-mid sp-t-s" style="top:calc(38% - 100%e);left:calc(76% - 50%e);">VAM</div>
-    <div style="top:calc(52% - 100%e);left:calc(76% - 50%e);">
-      <span class="sp-d-s f-num">
-        <eval input="/Zapp/{zapp_index}/Output/vam" outputFormat="VerticalSpeedMountain_Fourdigits" default="--"/>
-      </span>
-    </div>
-
-    <!-- Bottom-left metric: Max gradient -->
-    <div class="cm-mid sp-t-s" style="top:calc(72% - 100%e);left:calc(24% - 50%e);">Max</div>
-    <div style="top:calc(86% - 100%e);left:calc(24% - 50%e);">
-      <span class="sp-d-s f-num">
-        <eval input="/Zapp/{zapp_index}/Output/maxgradient" outputFormat="Percentage_Fourdigits" default="--"/>
-      </span>
-    </div>
-
-    <!-- Bottom-right metric: Category -->
-    <div class="cm-mid sp-t-s" style="top:calc(72% - 100%e);left:calc(76% - 50%e);">Category</div>
-    <div class="sp-b-m p-hc" style="top:calc(86% - 100%e);left:calc(76% - 50%e);">
-      <span id="category-value">--</span>
-    </div>
+    <userInput>
+      <!-- Switch view when lower button is pressed -->
+      <pushButton name="down" onClick="$.put('/Zapp/{zapp_index}/Event', 2, null, 'int32');" />
+    </userInput>
 
   </div>
 

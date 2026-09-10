@@ -1,0 +1,77 @@
+<uiView>
+  <div id="suuntoplus">
+
+    <!-- Title and its background -->
+    <div class="cm-fg" style="width:100%;height:18%;">
+      <div class="sp-t-m p-hc" style="top:calc(50% - 40%e);padding-top:10px;">Velo Climb</div>
+    </div>
+    
+    <!-- top left -->
+    <!-- Climb duration -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">
+        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(26% - 50%e)">CLIMB</div>
+        <div class="f-ico" style="top:calc(32% - 100%e);left:calc(26% - 50%e)">&#xF259;</div>
+        <div class="sp-d-m f-num" style="top:calc(42% - 50%e);left:calc(26% - 50%e)">
+          <eval input="/Fusion/Altitude/AscentTime" outputFormat="AscentDuration_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div class="sp-t-s cm-mid" style="top:19%;left:3%;width:46%;text-align:center;">CLIMB</div>
+        <div style="top:27%;left:3%;width:46%;height:24%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF259;</span>
+            <span class="sp-d-s f-num">
+              <eval input="/Fusion/Altitude/AscentTime" outputFormat="AscentDuration_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>
+
+    <!-- top right -->
+    <!-- Average gradient -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">
+        <div class="sp-t-s cm-mid p-hc" style="top:calc(24% - 100%e);left:calc(74% - 50%e)">AVG</div>
+        <div class="sp-d-m" style="top:calc(32% - 100%e);left:calc(74% - 50%e)">%</div>
+        <div class="sp-d-m f-num" style="top:calc(42% - 50%e);left:calc(74% - 50%e)">
+          <eval input="/Zapp/{zapp_index}/Output/avgGradient" outputFormat="Percentage_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div class="sp-t-s cm-mid" style="top:19%;left:51%;width:46%;text-align:center;">AVG</div>
+        <div style="top:27%;left:51%;width:46%;height:24%">
+          <div class="p-hc sp-vertical-center">
+            <span class="sp-d-s f-num">
+              <eval input="/Zapp/{zapp_index}/Output/avgGradient" outputFormat="Percentage_Fourdigits" default="--"/>
+            </span>
+            <span class="sp-d-s" style="padding-left:4px; font-size:20px;">%</span>
+          </div>
+        </div>
+    </:else>
+
+    <!-- bottom middle -->
+    <!-- Remaining ascent -->
+    <:if test="{APP_IS_DISPLAY_LARGE}">    
+        <div class="f-ico" style="top:calc(65% - 100%e);left:calc(36% - 50%e)">&#xF256;</div>
+        <div class="sp-d-s f-num" style="top:calc(66% - 100%e);left:calc(50% - 50%e); color:rgb(255, 0, 0);">
+          <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+        </div>
+    </:if>
+    <:else>
+        <div style="top:48%;left:25%;width:43%;height:30%">
+          <div class="p-hc sp-vertical-center">
+            <span class="f-ico" style="padding-right:4px">&#xF256;</span>
+            <span class="sp-d-s f-num" style="color:rgb(255, 0, 0);">
+              <eval input="/Navigation/Routes/NavigatedRoute/RemainAscent" outputFormat="Ascent_Fourdigits" default="--"/>
+            </span>
+          </div>
+        </div>
+    </:else>   
+
+    <userInput>
+      <!-- Switch view when lower button is pressed -->
+      <pushButton name="up" onClick="$.put('/Zapp/{zapp_index}/Event', 1, null, 'int32');" />
+    </userInput>
+
+  </div>
+
+</uiView>
