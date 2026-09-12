@@ -1,5 +1,7 @@
 # Changelog
 
+VeloClimb changes
+
 ## 2026-09-12
 
 - Fixed the heart-rate icon on the climb screen not rendering on-device: it was declared as a `<span>` with absolute positioning, which the on-watch renderer doesn't support the way the browser-based emulator does. Changed to a `<div>`, matching every other positioned icon in the app.
