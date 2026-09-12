@@ -1,77 +1,135 @@
-# SuuntoPlusClimbApp
+# Velo Climb
 
-A SuuntoPlus feature app for cycling that shows live climbing metrics: gradient, VAM, climb category, and summary outputs.
+A SuuntoPlus feature app for cycling that displays live climbing metrics, an animated climb-category gauge, live heart rate, and adds climb statistics to the workout summary.
 
-## Features
+## Current features
 
-- **Instantaneous gradient** — calculated from vertical speed and ground speed, smoothed to reduce GPS/barometer noise.
-- **VAM** — rolling vertical ascent rate over a 30-second window.
-- **Climb category** — instant gradient is mapped into descent/flat/Cat4–HC+ categories with color-coded UI feedback.
-- **Session metrics** — max gradient, total ascent, and average gradient are tracked while riding.
-- **Two-screen UI** — toggle between a climb dashboard and a profile screen with session stats.
+- Smoothed live gradient based on vertical speed and ground speed.
+- Rolling 30-second VAM (vertical ascent rate).
+- Maximum smoothed gradient for the current session.
+- Total ascent from Suunto altitude data.
+- Running average gradient from valid moving samples.
+- Eight climb categories from Descent through HC+.
+- An animated 8-segment corona gauge with a needle pointing at the current climb category.
+- Live heart rate reading on the climb screen.
+- Two watch screens that can be switched with the watch buttons.
+- Workout summary outputs for VAM, average gradient, and maximum gradient.
 
-## How it works
+## Telemetry inputs
 
-- `main.js` subscribes to `Activity/Current/Speed`, `Fusion/Altitude/VerticalSpeed`, and `Fusion/Altitude/Ascent`.
-- Instantaneous gradient is computed as:
-  - `gradient = (vSpeed / speed) * 100`
-- If ground speed is below `0.3 m/s`, the gradient is held constant to avoid noisy calculations.
-- Raw gradient values are clamped to `±60%`.
-- Gradient smoothing uses an exponential moving average with `α = 0.2`.
-- Average gradient is the running mean of smoothed gradient samples during the ride.
-- Max gradient is the highest smoothed gradient observed.
-- VAM is computed from the last 30 seconds of `ascent` values to produce a current ascent rate.
+The app declares three subscribed inputs in `manifest.json`:
 
-## Category mapping
+| Input | Source | Usage |
+|-------|--------|-------|
+| `speed` | `Activity/Current/Speed` | Ground speed for gradient calculation |
+| `vSpeed` | `Fusion/Altitude/VerticalSpeed` | Vertical speed for gradient calculation |
+| `ascent` | `Fusion/Altitude/Ascent` | Total ascent and rolling VAM |
 
-The app maps the smoothed gradient to one of eight categories:
+The templates also read these platform resources directly:
 
-| Output category | Gradient range | UI label | Color |
-|-----------------|----------------|----------|-------|
-| 0               | < 0%           | Descent  | Blue  |
-| 1               | 0% – 2%        | Flat     | Gray  |
-| 2               | 2% – 5%        | Cat4     | Green |
-| 3               | 5% – 7%        | Cat3     | Blue  |
-| 4               | 7% – 8%        | Cat2     | Yellow|
-| 5               | 8% – 10%       | Cat1     | Orange|
-| 6               | 10% – 12%      | HC       | Red   |
-| 7               | ≥ 12%          | HC+      | Dark red |
+- `Fusion/Altitude/AscentTime` for climb duration.
+- `Navigation/Routes/NavigatedRoute/RemainAscent` for remaining route ascent.
+- `Activity/Move/-1/Heartrate/Current` for the live heart rate reading on the climb screen.
 
-## On-watch display
+## Calculations
 
-### `t.html` — Climb screen
+### Gradient
 
-- Current gradient (`/Zapp/{zapp_index}/Output/gradient`)
-- Current VAM (`/Zapp/{zapp_index}/Output/vam`)
-- Max gradient (`/Zapp/{zapp_index}/Output/maxgradient`)
-- Total ascent (`/Zapp/{zapp_index}/Output/totalAscent`)
-- Category label and color gauge
-- Toggled by the lower button via the `onEvent` callback
+When ground speed is greater than `0.3 m/s`, the instantaneous gradient is calculated as:
 
-### `t2.html` — Profile screen
+```text
+gradient = (vertical speed / ground speed) * 100
+```
 
-- Climb duration from `Fusion/Altitude/AscentTime`
-- Average gradient from `/Zapp/{zapp_index}/Output/avgGradient`
-- Remaining route ascent from `Navigation/Routes/NavigatedRoute/RemainAscent` when available
-- Screen toggle via the upper button
+The raw value is limited to `-60%` through `+60%`, then smoothed with an exponential moving average using `alpha = 0.2`. When the speed threshold is not met, the previous smoothed value is retained.
 
-> Note: `t2.html` contains an altitude-profile graph block that is currently commented out.
+The app tracks the maximum smoothed gradient and calculates average gradient as the mean of smoothed-gradient samples collected while the speed threshold is met. State is initialized when the app loads and is held for the current app session.
 
-## Summary outputs
+### VAM
 
-The app exposes summary values for the exercise report:
+`evaluate()` is expected to run approximately once per second. The app stores up to 31 ascent samples and calculates the current ascent rate from the oldest and newest values in that rolling window:
 
-- `Avg VAM` — `output.vam`
-- `Avg gradient` — `output.avgGradient`
-- `Max gradient` — `output.maxgradient`
+```text
+VAM = (latest ascent - oldest ascent) / elapsed sample intervals
+```
+
+The output uses Suunto's `VerticalSpeedMountain_Fourdigits` format. Despite the summary label `Avg VAM`, the value is the current rolling-window VAM rather than a whole-session average.
+
+## Climb categories
+
+Categories are based on the smoothed gradient, including a dedicated category for descents.
+
+| Output value | Gradient | Label | Color |
+|--------------|----------|-------|-------|
+| `0` | `< 0%` | Descent | Blue |
+| `1` | `0%` to `< 2%` | Flat | Gray |
+| `2` | `2%` to `< 5%` | Cat4 | Green |
+| `3` | `5%` to `< 7%` | Cat3 | Blue |
+| `4` | `7%` to `< 8%` | Cat2 | Yellow |
+| `5` | `8%` to `< 10%` | Cat1 | Orange |
+| `6` | `10%` to `< 12%` | HC | Red |
+| `7` | `>= 12%` | HC+ | Dark red |
+
+On the climb screen, the current category also drives an animated corona gauge: an 8-segment ring drawn on a full-screen canvas, with a needle pointing at the active segment and the active segment highlighted in its category color. The gauge redraws whenever the category output changes.
+
+## Watch screens
+
+### `t.html` - Climb screen
+
+Displays:
+
+- Current gradient, formatted as a percentage.
+- Current rolling VAM.
+- Live heart rate.
+- Maximum gradient.
+- Total ascent.
+- Current category label with its category color, plus the animated corona gauge and needle described above.
+- Separate large-display and small/medium-display layouts.
+
+Pressing the watch's lower/down button sends an app event and switches to `t2.html`.
+
+### `t2.html` - Profile screen
+
+Displays:
+
+- Climb duration from `Fusion/Altitude/AscentTime`.
+- Average gradient for the current app session.
+- Remaining route ascent when navigation data is available.
+- Separate large-display and small/medium-display layouts.
+
+Pressing the watch's upper/up button sends an app event and switches back to `t.html`.
+
+The altitude-profile graph markup is present in the file but currently commented out, so no graph is rendered.
+
+## Workout summary
+
+`main.js` exposes these summary outputs:
+
+| ID | Name | Format | Value |
+|----|------|--------|-------|
+| `vam` | Avg VAM | `VerticalSpeedMountain_Fourdigits` | Rolling VAM output |
+| `gradient` | Avg gradient | `Percentage_Fourdigits` | Running average gradient |
+| `maxGradient` | Max gradient | `Percentage_Fourdigits` | Maximum smoothed gradient |
 
 ## Project structure
 
-- `manifest.json` — app metadata, input/output declarations, and template registration.
-- `main.js` — main app logic, state initialization, telemetry processing, category classification, and UI selection.
-- `t.html` — climb dashboard UI template.
-- `t2.html` — profile UI template.
+- `manifest.json` - App metadata, declared telemetry inputs and outputs, registered templates, and workout usage.
+- `main.js` - State initialization, gradient and VAM calculations, category classification, screen switching, and summary outputs.
+- `t.html` - Climb screen template, including the corona gauge canvas drawing logic.
+- `t2.html` - Profile screen template.
+- `cyclin01-l.fea`, `cyclin01-m.fea`, `cyclin01-n.fea`, `cyclin01-o.fea`, `cyclin01-q.fea`, `cyclin01-s.fea` - Compiled ZIP-based Suunto resources for the supported device/display variants (gitignored build output, not checked in).
+- `LICENSE` - GPL-2.0 license text.
+
+There is currently no package manager configuration, build script, automated test suite, or simulator configuration in this repository.
+
+## App metadata
+
+- **Name:** Velo Climb
+- **Version:** 1.0
+- **Type:** SuuntoPlus feature app
+- **Usage:** Workout
+- **Author:** Panagiotis Kritikakos
 
 ## License
 
-GPL-2.0 — see [LICENSE](LICENSE).
+GPL-2.0 - see [LICENSE](LICENSE).
